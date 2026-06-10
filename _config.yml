@@ -1,0 +1,25 @@
+# GitHub Pages Configuration
+plugins:
+  - jekyll-remote-theme
+
+remote_theme: minimal
+
+title: RF Sentinel
+description: Plataforma Open Source para análisis de radiofrecuencia usando HackRF One y SDR
+
+# Open Graph
+defaults:
+  - scope:
+      path: ""
+    values:
+      image: /assets/social/social-preview.webp
+      image_alt: RF Sentinel - Radio Frequency Analysis Platform
+
+# SEO
+lang: es-ES
+lang_alternate: en-US
+
+# Build settings
+markdown: kramdown
+theme:
+  name: minimal

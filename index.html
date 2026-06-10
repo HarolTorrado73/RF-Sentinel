@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="RF Sentinel - Plataforma Open Source para análisis de radiofrecuencia usando HackRF One y SDR">
+  <meta property="og:title" content="RF Sentinel - Radio Frequency Analysis Platform">
+  <meta property="og:description" content="Plataforma Open Source para análisis de radiofrecuencia usando HackRF One y otros SDR">
+  <meta property="og:image" content="assets/social/social-preview.webp">
+  <meta property="og:type" content="website">
+  <title>RF Sentinel | Radio Frequency Analysis Platform</title>
+  <style>
+    :root {
+      --dark-bg: #0a0f1a;
+      --darker-bg: #0d1b2a;
+      --accent-cyan: #00f3ff;
+      --accent-dark: #0077ff;
+      --accent-green: #00ff88;
+      --text-primary: #ffffff;
+      --text-secondary: #aaaaaa;
+      --border: #1a3a5f;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: radial-gradient(circle at 20% 50%, #0a0f1a 0%, #050810 100%);
+      color: var(--text-primary);
+      min-height: 100vh;
+    }
+    .container { max-width: 1400px; margin: 0 auto; padding: 0 2rem; }
+
+    header { padding: 1rem 0; border-bottom: 1px solid var(--border); }
+    nav { display: flex; justify-content: space-between; align-items: center; }
+    .logo { display: flex; align-items: center; gap: 0.5rem; }
+    .logo h1 { color: var(--accent-cyan); font-size: 1.5rem; }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a { color: var(--text-secondary); text-decoration: none; transition: color 0.3s; }
+    .nav-links a:hover { color: var(--accent-cyan); }
+
+    .hero { padding: 6rem 0 4rem; text-align: center; position: relative; }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(180deg, transparent 0%, rgba(10, 15, 26, 0.5) 100%);
+      pointer-events: none;
+    }
+    .hero-content { position: relative; z-index: 1; }
+    .hero h2 { font-size: 3.5rem; color: var(--accent-cyan); margin-bottom: 1rem; }
+    .hero p { font-size: 1.25rem; color: var(--text-secondary); max-width: 700px; margin: 0 auto 2rem; }
+    .badge { display: inline-block; padding: 0.25rem 0.75rem; background: var(--accent-dark); color: white; border-radius: 20px; font-size: 0.875rem; margin: 0.25rem; }
+
+    .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin: 4rem 0; }
+    .metric-card {
+      background: linear-gradient(145deg, var(--darker-bg), var(--dark-bg));
+      padding: 2rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      text-align: center;
+    }
+    .metric-card .value { font-size: 3rem; color: var(--accent-cyan); font-weight: bold; }
+    .metric-card .label { color: var(--text-secondary); margin-top: 0.5rem; }
+
+    .section { padding: 4rem 0; }
+    .section h3 { font-size: 2.5rem; color: var(--accent-cyan); margin-bottom: 2rem; text-align: center; }
+
+    .demo-container { background: var(--darker-bg); border-radius: 8px; padding: 2rem; border: 1px solid var(--border); }
+    .spectrum-demo { height: 200px; position: relative; overflow: hidden; margin-bottom: 2rem; }
+    .spectrum-line { position: absolute; bottom: 0; width: 2px; background: var(--accent-cyan); animation: pulse 2s infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+
+    .waterfall-demo { height: 150px; background: linear-gradient(0deg, #001a2d 0%, #003366 100%); border-radius: 4px; overflow: hidden; position: relative; }
+    .waterfall-bar { position: absolute; bottom: 0; width: 4px; background: var(--accent-green); animation: waterfall 1s linear infinite; }
+    @keyframes waterfall { 0% { height: 0; } 100% { height: 100%; } }
+
+    .roadmap { position: relative; padding: 2rem 0; }
+    .roadmap::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--border);
+      transform: translateY(-50%);
+    }
+    .roadmap-items { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; position: relative; }
+    .roadmap-item { background: var(--darker-bg); padding: 1.5rem; border-radius: 8px; border-left: 3px solid var(--accent-cyan); position: relative; }
+    .roadmap-item.completed { border-left-color: var(--accent-green); }
+    .roadmap-item h4 { color: var(--accent-cyan); margin-bottom: 0.5rem; }
+
+    .architecture-diagram { background: var(--darker-bg); padding: 3rem; border-radius: 8px; border: 1px solid var(--border); }
+    .arch-nodes { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 2rem; }
+    .arch-node { background: var(--dark-bg); padding: 1.5rem 2rem; border-radius: 8px; border: 1px solid var(--border); cursor: pointer; transition: all 0.3s; }
+    .arch-node:hover { transform: scale(1.05); border-color: var(--accent-cyan); }
+
+    footer { background: var(--darker-bg); padding: 3rem 0; border-top: 1px solid var(--border); text-align: center; }
+    .social-links { display: flex; justify-content: center; gap: 2rem; margin: 1rem 0; }
+    .social-links a { color: var(--text-secondary); text-decoration: none; }
+
+    @media (max-width: 768px) {
+      .hero h2 { font-size: 2.5rem; }
+      .roadmap-items { grid-template-columns: 1fr; }
+      .roadmap::before { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <nav>
+        <div class="logo">
+          <span style="color: var(--accent-cyan); font-size: 1.5rem;">⚡</span>
+          <h1>RF Sentinel</h1>
+        </div>
+        <ul class="nav-links">
+          <li><a href="#demo">Demo</a></li>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#roadmap">Roadmap</a></li>
+          <li><a href="#architecture">Architecture</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-content container">
+      <h2>Radio Frequency Analysis Platform</h2>
+      <p>Plataforma Open Source profesional para análisis de radiofrecuencia en tiempo real usando HackRF One, RTL-SDR y tecnologías SIGINT</p>
+      <div>
+        <span class="badge">Python 3.13+</span>
+        <span class="badge">FastAPI</span>
+        <span class="badge">PyQtGraph</span>
+        <span class="badge">MIT License</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="container">
+    <div class="metrics">
+      <div class="metric-card"><div class="value" id="stat1">0</div><div class="label">Hz de Rango</div></div>
+      <div class="metric-card"><div class="value" id="stat2">0</div><div class="label">Dispositivos SDR</div></div>
+      <div class="metric-card"><div class="value" id="stat3">0</div><div class="label">Señales Detectadas</div></div>
+      <div class="metric-card"><div class="value" id="stat4">0</div><div class="label">Exportaciones</div></div>
+    </div>
+  </div>
+
+  <section id="demo" class="section">
+    <div class="container">
+      <h3>Live Demo</h3>
+      <div class="demo-container">
+        <h4 style="color: var(--accent-cyan); margin-bottom: 1rem;">Spectrum Analyzer Animado</h4>
+        <div class="spectrum-demo" id="spectrum"></div>
+        <h4 style="color: var(--accent-cyan); margin-bottom: 1rem;">Waterfall Monitor Animado</h4>
+        <div class="waterfall-demo" id="waterfall"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="features" class="section">
+    <div class="container">
+      <h3>Features Principales</h3>
+      <div class="architecture-diagram">
+        <div class="arch-nodes">
+          <div class="arch-node" onclick="showFeature('spectrum')">Spectrum Analyzer</div>
+          <div class="arch-node" onclick="showFeature('waterfall')">Waterfall Profesional</div>
+          <div class="arch-node" onclick="showFeature('detection')">Detección de Señales</div>
+          <div class="arch-node" onclick="showFeature('classification')">Clasificación ML</div>
+          <div class="arch-node" onclick="showFeature('export')">Export PDF/JSON</div>
+          <div class="arch-node" onclick="showFeature('plugins')">Sistema Plugins</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="roadmap" class="section">
+    <div class="container">
+      <h3>Roadmap Interativo 2025</h3>
+      <div class="roadmap">
+        <div class="roadmap-items">
+          <div class="roadmap-item completed">
+            <h4>Q1 - Fundación</h4>
+            <p>API REST, SDR Core, Database</p>
+          </div>
+          <div class="roadmap-item">
+            <h4>Q2 - ML & UI</h4>
+            <p>Clasificador ML, Dashboard Qt6</p>
+          </div>
+          <div class="roadmap-item">
+            <h4>Q3 - Advanced</h4>
+            <p>Escaneo automático, Triggers</p>
+          </div>
+          <div class="roadmap-item">
+            <h4>Q4 - v1.0</h4>
+            <p>Release estable, Docker support</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="architecture" class="section">
+    <div class="container">
+      <h3>Arquitectura Navegable</h3>
+      <div class="architecture-diagram">
+        <div class="arch-nodes">
+          <div class="arch-node" onclick="showModule('api')">🔌 API Layer</div>
+          <div class="arch-node" onclick="showModule('sdr')">📡 SDR Drivers</div>
+          <div class="arch-node" onclick="showModule('analysis')">📊 Analysis</div>
+          <div class="arch-node" onclick="showModule('database')">💾 Database</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 RF Sentinel Team. MIT License.</p>
+      <div class="social-links">
+        <a href="https://github.com/rf-sentinel">GitHub</a>
+        <a href="https://docs.rf-sentinel.org">Docs</a>
+        <a href="LICENSE">License</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Animated spectrum
+    function createSpectrum() {
+      const container = document.getElementById('spectrum');
+      container.innerHTML = '';
+      for (let i = 0; i < 100; i++) {
+        const bar = document.createElement('div');
+        bar.className = 'spectrum-line';
+        bar.style.left = (i * 10) + 'px';
+        bar.style.height = Math.random() * 150 + 10 + 'px';
+        bar.style.animationDelay = Math.random() * 2 + 's';
+        container.appendChild(bar);
+      }
+    }
+
+    // Animated waterfall
+    function createWaterfall() {
+      const container = document.getElementById('waterfall');
+      container.innerHTML = '';
+      for (let i = 0; i < 50; i++) {
+        const bar = document.createElement('div');
+        bar.className = 'waterfall-bar';
+        bar.style.left = (i * 20) + 'px';
+        bar.style.animationDelay = Math.random() * 1 + 's';
+        container.appendChild(bar);
+      }
+    }
+
+    // Live counters
+    function animateCounters() {
+      const counters = [
+        { id: 'stat1', value: 6.0, decimals: 1, suffix: 'GHz' },
+        { id: 'stat2', value: 5 },
+        { id: 'stat3', value: 1247 },
+        { id: 'stat4', value: 89 }
+      ];
+      counters.forEach(c => {
+        let current = 0;
+        const increment = c.value / 50;
+        const el = document.getElementById(c.id);
+        const timer = setInterval(() => {
+          current += increment;
+          if (current >= c.value) {
+            current = c.value;
+            clearInterval(timer);
+          }
+          el.textContent = c.decimals ? current.toFixed(1) : Math.floor(current);
+          if (c.suffix) el.textContent += ' ' + c.suffix;
+        }, 30);
+      });
+    }
+
+    function showFeature(name) {
+      alert('RF Sentinel - Feature: ' + name);
+    }
+
+    function showModule(name) {
+      alert('RF Sentinel - Module: ' + name);
+    }
+
+    createSpectrum();
+    createWaterfall();
+    animateCounters();
+    setInterval(createSpectrum, 3000);
+  </script>
+</body>
+</html>

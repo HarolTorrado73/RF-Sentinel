@@ -1,0 +1,12 @@
+[project]
+name = "rf-sentinel-dev"
+dependencies = [
+    "rf-sentinel",
+    "pytest = \"*\"",
+    "pytest-cov = \"*\"",
+    "pytest-asyncio = \"*\"",
+    "ruff = \"*\"",
+    "bandit = \"*\"",
+    "mypy = \"*\"",
+    "pre-commit = \"*\"",
+]

@@ -104,6 +104,8 @@ Endpoints disponibles:
 - `GET /capture` - Listar capturas
 - `POST /export/pdf` - Exportar a PDF
 
+Espero lo comprendas y te ayude mucho   
+
 ## Documentación
 
 [docs.rf-sentinel.org](https://docs.rf-sentinel.org)

@@ -38,6 +38,7 @@ header {
   top: 0;
   width: 100%;
   padding: 1rem 2rem;
+  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   background: var(--glass-bg);
   border-bottom: 1px solid var(--glass-border);
@@ -98,11 +99,14 @@ main { position: relative; z-index: 1; }
   align-items: center;
   justify-content: center;
   text-align: center;
+  background: linear-gradient(135deg, #0a0f1a 0%, #0d1b2a 100%);
 }
 
 .hero-content {
   max-width: 800px;
   padding: 2rem;
+  position: relative;
+  z-index: 10;
 }
 
 .hero h2 {
@@ -185,6 +189,7 @@ main { position: relative; z-index: 1; }
 
 .glass-card {
   background: var(--glass-bg);
+  -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
   border: 1px solid var(--glass-border);
   border-radius: 16px;
@@ -266,6 +271,7 @@ main { position: relative; z-index: 1; }
 
 .arch-node {
   background: var(--glass-bg);
+  -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
   border: 1px solid var(--glass-border);
   border-radius: 12px;
@@ -296,6 +302,7 @@ main { position: relative; z-index: 1; }
 
 .roadmap-item {
   background: var(--glass-bg);
+  -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
   border: 1px solid var(--glass-border);
   border-radius: 16px;
@@ -319,6 +326,7 @@ main { position: relative; z-index: 1; }
   right: 0;
   bottom: 0;
   background: rgba(0, 0, 0, 0.7);
+  -webkit-backdrop-filter: blur(6px);
   backdrop-filter: blur(6px);
   z-index: 200;
   display: none;
@@ -423,6 +431,7 @@ main { position: relative; z-index: 1; }
 
 footer {
   background: var(--glass-bg);
+  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   padding: 3rem 0;
   border-top: 1px solid var(--glass-border);
@@ -441,9 +450,51 @@ footer {
   text-decoration: none;
 }
 
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.glass-card--section {
+  margin: 2rem 0;
+}
+
+.canvas-title {
+  color: var(--accent-cyan);
+  margin-bottom: 1rem;
+}
+
+.canvas-subtitle {
+  color: var(--accent-cyan);
+  margin: 1.5rem 0 1rem;
+}
+
+.modal-description {
+  color: #94a3b8;
+  font-size: 13px;
+  line-height: 1.7;
+  margin-bottom: 14px;
+}
+
 @media (max-width: 768px) {
   .hero h2 { font-size: 2.5rem; }
   .roadmap-items { grid-template-columns: 1fr; }
   .nav-links { display: none; }
   .section { padding: 4rem 1rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 2px;
 }

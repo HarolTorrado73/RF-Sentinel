@@ -56,3 +56,13 @@ htmlcov/
 # OS files
 .DS_Store
 Thumbs.db
+
+# Frontend
+node_modules/
+
+# Tooling
+.kilo/
+.ruff_cache/
+
+# Jekyll (GitHub Pages)
+_site/

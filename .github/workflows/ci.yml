@@ -18,10 +18,10 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -e ".[dev]" || true
+          pip install -e ".[dev]"
 
       - name: Lint with ruff
-        run: ruff check rf_sentinel || true
+        run: ruff check rf_sentinel
 
       - name: Run tests
-        run: pytest || true
+        run: pytest

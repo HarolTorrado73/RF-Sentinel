@@ -6,10 +6,6 @@ const Dashboard = (() => {
   let activeFreq = 433.92;
   let signalStrength = -45;
   let snr = 18;
-  let canvas = null;
-  let ctx = null;
-  let intensityHistory = [];
-  const MAX_HISTORY = 100;
 
   function randomFreq() {
     const base = BASES[Math.floor(Math.random() * BASES.length)];
@@ -46,7 +42,7 @@ const Dashboard = (() => {
     activeFreq = parseFloat((activeFreq + (Math.random() - 0.5) * 0.2).toFixed(4));
     activeFreq = Math.max(27, Math.min(6000, activeFreq));
 
-    signalStrength = Math.round(Math.max(-90, Math.min(-20, signalStrength + (Math.random() - 0.5) * 10));
+    signalStrength = Math.round(Math.max(-90, Math.min(-20, signalStrength + (Math.random() - 0.5) * 10)));
     snr = Math.round(Math.max(0, Math.min(40, snr + (Math.random() - 0.5) * 4));
 
     if (Math.random() > 0.3) {
@@ -55,25 +51,18 @@ const Dashboard = (() => {
       signalCounter++;
       if (detectedSignals.length > 30) detectedSignals.pop();
     }
-
-    if (ctx) {
-      intensityHistory.push(signalStrength);
-      if (intensityHistory.length > MAX_HISTORY) intensityHistory.shift();
-    }
   }
 
   function renderMetrics() {
     const freqEl = document.getElementById('range-counter');
-    const strengthEl = document.getElementById('strength-counter');
-    const snrEl = document.getElementById('snr-counter');
-    const actCountEl = document.getElementById('devices-counter');
+    const devicesEl = document.getElementById('devices-counter');
     const sigCountEl = document.getElementById('signals-counter');
+    const exportsEl = document.getElementById('exports-counter');
 
     if (freqEl) freqEl.textContent = formatFreq(activeFreq);
-    if (strengthEl) strengthEl.textContent = formatStrength(signalStrength);
-    if (snrEl) snrEl.textContent = snr + ' dB';
+    if (devicesEl) devicesEl.textContent = detectedSignals.length;
     if (sigCountEl) sigCountEl.textContent = signalCounter.toLocaleString();
-    if (actCountEl) actCountEl.textContent = detectedSignals.length;
+    if (exportsEl) exportsEl.textContent = '89';
   }
 
   function renderLists() {
@@ -95,55 +84,10 @@ const Dashboard = (() => {
     }
   }
 
-  function drawChart() {
-    if (!ctx || !canvas) return;
-    const w = canvas.width;
-    const h = canvas.height;
-    ctx.clearRect(0, 0, w, h);
-
-    ctx.strokeStyle = '#0891b2';
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-
-    if (intensityHistory.length < 2) return;
-
-    const minDb = -90;
-    const maxDb = -20;
-    const range = maxDb - minDb;
-    const step = w / (MAX_HISTORY - 1);
-
-    intensityHistory.forEach((db, i) => {
-      const x = i * step;
-      const y = h - ((db - minDb) / range) * h;
-      const cy = Math.max(0, Math.min(h, y));
-      if (i === 0) ctx.moveTo(x, cy);
-      else ctx.lineTo(x, cy);
-    });
-
-    ctx.stroke();
-    ctx.shadowBlur = 0;
-    ctx.strokeStyle = '#0a1628';
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.moveTo(0, h / 2);
-    ctx.lineTo(w, h / 2);
-    ctx.stroke();
-  }
-
-  function initChart() {
-    canvas = document.getElementById('spectrum-canvas');
-    if (!canvas) return;
-    ctx = canvas.getContext('2d');
-    const rect = canvas.getBoundingClientRect();
-    canvas.width = Math.max(400, rect.width || 800);
-    canvas.height = 160;
-  }
-
   function updateLoop() {
     updateSimulated();
     renderMetrics();
-    drawChart();
-    if (Math.random() > 0.4) renderLists();
+    renderLists();
   }
 
   function startPolling() {
@@ -152,7 +96,6 @@ const Dashboard = (() => {
   }
 
   function initDashboard() {
-    initChart();
     renderLists();
     startPolling();
   }
@@ -163,5 +106,3 @@ const Dashboard = (() => {
     getDetectedSignals: () => [...detectedSignals]
   };
 })();
-
-window.Dashboard = Dashboard;

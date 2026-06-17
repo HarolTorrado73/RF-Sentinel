@@ -32,13 +32,10 @@ function navTo(el) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  const bgParticles = window.Background.ParticleSystem('hero-canvas');
-  if (bgParticles) bgParticles.start();
+  const bgParticles = CanvasVisualizations.ParticleSystem('hero-canvas');
 
-  const spectrum = window.Spectrum.SpectrumAnalyzer('spectrum-canvas');
-  const waterfall = window.Waterfall.Waterfall('waterfall-canvas');
-  if (spectrum) spectrum.start();
-  if (waterfall) waterfall.start();
+  const spectrum = CanvasVisualizations.SpectrumAnalyzer('spectrum-canvas');
+  const waterfall = CanvasVisualizations.WaterfallRenderer('waterfall-canvas');
 
   window.Dashboard.initDashboard();
   window.Modals.init();

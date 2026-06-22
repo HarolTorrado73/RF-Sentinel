@@ -23,7 +23,7 @@ def main() -> None:
     if args.command == "api":
         uvicorn.run("rf_sentinel.api.main:app", host=args.host, port=args.port, reload=True)
     elif args.command == "ui":
-        from rf_sentinel.ui.main import main as ui_main
+        from rf_sentinel.ui.desktop.main import main as ui_main
 
         ui_main()
     else:
@@ -33,3 +33,7 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+
+# Alias para compatibilidad con entry point de pyproject.toml
+cli = main

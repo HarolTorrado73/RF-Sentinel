@@ -2,8 +2,10 @@
 
 import numpy as np
 
+from rf_sentinel.detection.base import Detector
 
-class PeakFinder:
+
+class PeakFinder(Detector):
     """Busca picos en señales."""
 
     def __init__(self, threshold: float = -60.0, min_prominence: float = 5.0):
@@ -14,7 +16,11 @@ class PeakFinder:
         """Encuentra picos en los datos."""
         peaks = []
         for i in range(1, len(data) - 1):
-            if data[i] > self.threshold and data[i] > data[i - 1] and data[i] > data[i + 1]:
+            if (
+                data[i] > self.threshold
+                and data[i] > data[i - 1]
+                and data[i] > data[i + 1]
+            ):
                 prominence = data[i] - max(data[i - 1], data[i + 1])
                 if prominence >= self.min_prominence:
                     peaks.append((int(i), float(data[i])))
@@ -27,5 +33,17 @@ class PeakFinder:
         peaks = self.find_peaks(spectrum)
         return [
             {"frequency": float(frequencies[idx]), "power": power, "index": idx}
+            for idx, power in peaks
+        ]
+
+    def detect(
+        self, data: np.ndarray, frequencies: np.ndarray | None = None
+    ) -> list[dict[str, float]]:
+        """Detecta picos usando la interfaz Detector."""
+        if frequencies is not None:
+            return self.find_frequency_peaks(data, frequencies)
+        peaks = self.find_peaks(data)
+        return [
+            {"frequency": float(idx), "power": power, "bandwidth": 0.0}
             for idx, power in peaks
         ]

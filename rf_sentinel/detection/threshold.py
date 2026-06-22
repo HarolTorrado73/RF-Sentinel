@@ -2,15 +2,19 @@
 
 import numpy as np
 
+from rf_sentinel.detection.base import Detector
 
-class SignalDetector:
+
+class SignalDetector(Detector):
     """Detector de señales con algoritmos configurables."""
 
     def __init__(self, threshold: float = -60.0, min_width: int = 10):
         self.threshold = threshold
         self.min_width = min_width
 
-    def detect(self, spectrum: np.ndarray, frequencies: np.ndarray) -> list[dict[str, float]]:
+    def detect(
+        self, spectrum: np.ndarray, frequencies: np.ndarray | None = None
+    ) -> list[dict[str, float]]:
         """Detecta picos en el espectro."""
         peaks = []
         above_threshold = spectrum > self.threshold
@@ -28,11 +32,21 @@ class SignalDetector:
                 if width >= self.min_width:
                     peak_power = float(np.max(spectrum[left : right + 1]))
                     peak_idx = int(np.argmax(spectrum[left : right + 1]) + left)
+                    freq = (
+                        float(frequencies[peak_idx])
+                        if frequencies is not None
+                        else float(peak_idx)
+                    )
+                    bw = (
+                        float(frequencies[right] - frequencies[left])
+                        if frequencies is not None
+                        else float(width)
+                    )
                     peaks.append(
                         {
-                            "frequency": float(frequencies[peak_idx]),
+                            "frequency": freq,
                             "power": peak_power,
-                            "bandwidth": float(frequencies[right] - frequencies[left]),
+                            "bandwidth": bw,
                         }
                     )
 

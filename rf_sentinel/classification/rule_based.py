@@ -2,8 +2,10 @@
 
 from typing import Any
 
+from rf_sentinel.classification.base import Classifier
 
-class SignalClassifier:
+
+class SignalClassifier(Classifier):
     """Clasificador básico de señales."""
 
     MODULATIONS = {

@@ -2,8 +2,10 @@
 
 from typing import Any
 
+from rf_sentinel.classification.base import Classifier
 
-class MLClassifier:
+
+class MLClassifier(Classifier):
     """Clasificador basado en ML (placeholder)."""
 
     def __init__(self, model_path: str = "models/classifier.pkl"):
@@ -16,9 +18,9 @@ class MLClassifier:
         # Placeholder - implementar con sklearn/tensorflow
         pass
 
-    def predict(self, _features: dict[str, Any]) -> dict[str, Any]:
-        """Predice tipo de señal."""
-        return {"type": "unknown", "confidence": 0.0, "modulation": "unknown"}
+    def classify(self, _signal: dict[str, Any]) -> dict[str, Any]:
+        """Clasifica una señal usando ML."""
+        return {"modulation": "unknown", "confidence": 0.0, "type": "unknown"}
 
     def train(self, training_data: list[dict[str, Any]]) -> None:
         """Entrena modelo con nuevos datos."""

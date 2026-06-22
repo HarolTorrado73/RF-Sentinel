@@ -1,7 +1,7 @@
 import pytest
 
-from rf_sentinel.sdr.hackrf import HackRFSource
-from rf_sentinel.sdr.rtl_sdr import RTLSDRSource
+from rf_sentinel.devices.hackrf import HackRFSource
+from rf_sentinel.devices.rtl_sdr import RTLSDRSource
 
 
 def test_hackrf_device():

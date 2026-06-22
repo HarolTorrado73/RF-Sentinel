@@ -1,6 +1,7 @@
 """Interfaz gráfica principal."""
 
 import sys
+from typing import TYPE_CHECKING
 
 import numpy as np
 import pyqtgraph as pg
@@ -16,6 +17,10 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
+
+if TYPE_CHECKING:
+    from rf_sentinel.devices.registry import DeviceRegistry
+    from rf_sentinel.services.scan_service import ScanService
 
 
 class SpectrumWidget(pg.GraphicsLayoutWidget):
@@ -48,8 +53,14 @@ class WaterfallWidget(pg.GraphicsLayoutWidget):
 class RFMainUI(QMainWindow):
     """Ventana principal de RF Sentinel."""
 
-    def __init__(self):
+    def __init__(
+        self,
+        scan_service: "ScanService | None" = None,
+        device_registry: "DeviceRegistry | None" = None,
+    ):
         super().__init__()
+        self.scan_service = scan_service
+        self.device_registry = device_registry
         self.setWindowTitle("RF Sentinel - Spectrum Analyzer")
         self.resize(1200, 800)
 
@@ -76,7 +87,10 @@ class RFMainUI(QMainWindow):
 
         controls.addWidget(QLabel("Dispositivo:"))
         self.device_combo = QComboBox()
-        self.device_combo.addItems(["HackRF One", "RTL-SDR"])
+        if self.device_registry:
+            self.device_combo.addItems(self.device_registry.list_devices())
+        else:
+            self.device_combo.addItems(["HackRF One", "RTL-SDR"])
         controls.addWidget(self.device_combo)
 
         self.scan_btn = QPushButton("Escanear")

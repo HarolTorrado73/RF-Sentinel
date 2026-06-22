@@ -2,11 +2,20 @@
 
 from typing import Any
 
+from rf_sentinel.database.repositories.capture_repo import CaptureRepository
+from rf_sentinel.database.repositories.signal_repo import SignalRepository
+
 
 class ScanService:
     """Servicio para gestión de escaneos."""
 
-    def __init__(self):
+    def __init__(
+        self,
+        capture_repo: CaptureRepository | None = None,
+        signal_repo: SignalRepository | None = None,
+    ):
+        self.capture_repo = capture_repo
+        self.signal_repo = signal_repo
         self.scans: dict[str, dict[str, Any]] = {}
 
     async def start_scan(self, start_freq: float, stop_freq: float, step: float = 1e6) -> str:

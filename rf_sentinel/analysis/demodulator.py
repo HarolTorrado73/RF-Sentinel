@@ -31,5 +31,6 @@ class Demodulator:
         return (envelope > np.mean(envelope)).astype(float)
 
     def _fsk_demod(self, samples: np.ndarray) -> np.ndarray:
-        """Demodulación FSK."""
-        return self._ask_demod(samples)
+        """Demodulación FSK real."""
+        phase_diff = np.angle(samples[1:] * np.conj(samples[:-1]))
+        return (phase_diff > 0).astype(float)

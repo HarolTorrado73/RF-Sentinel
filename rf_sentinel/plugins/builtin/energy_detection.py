@@ -4,7 +4,8 @@ from typing import Any
 
 import numpy as np
 
-from .. import DetectionPlugin
+from rf_sentinel.detection.energy import EnergyDetector
+from rf_sentinel.plugins.core.base import DetectionPlugin
 
 
 class EnergyDetectionPlugin(DetectionPlugin):
@@ -18,12 +19,14 @@ class EnergyDetectionPlugin(DetectionPlugin):
         self.threshold_db = threshold_db
         self.min_bandwidth = min_bandwidth
         self._initialized = False
+        self._detector = EnergyDetector(threshold_db=threshold_db, window_size=1024)
 
     async def initialize(self) -> None:
         self._initialized = True
 
     async def cleanup(self) -> None:
         self._initialized = False
+        self._detector = EnergyDetector()
 
     def process(self, data: dict[str, Any]) -> dict[str, Any]:
         if not self._initialized:
@@ -32,25 +35,7 @@ class EnergyDetectionPlugin(DetectionPlugin):
 
     def detect(self, samples: bytes) -> list[dict[str, Any]]:
         """Detecta señales usando detección de energía."""
-        # Convert bytes to numpy array
+        if not self._initialized:
+            raise RuntimeError("Plugin not initialized")
         iq_data = np.frombuffer(samples, dtype=np.complex64)
-
-        # Power spectral density
-        psd = np.abs(np.fft.fft(iq_data)) ** 2
-        psd_db = 10 * np.log10(psd + 1e-10)
-
-        # Find peaks above threshold
-        peaks = []
-
-        for i, power in enumerate(psd_db):
-            if power > self.threshold_db:
-                frequency = i  # Simplified
-                peaks.append(
-                    {
-                        "frequency": float(frequency),
-                        "bandwidth": self.min_bandwidth,
-                        "power": float(power),
-                    }
-                )
-
-        return peaks[:10]  # Max 10 peaks
+        return self._detector.detect(iq_data)[:10]

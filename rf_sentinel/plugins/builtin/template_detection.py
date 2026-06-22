@@ -2,7 +2,7 @@
 
 from typing import Any
 
-from .. import DetectionPlugin
+from rf_sentinel.plugins.core.base import DetectionPlugin
 
 
 class TemplateDetectionPlugin(DetectionPlugin):

@@ -28,7 +28,27 @@ class CaptureResponse(BaseModel):
     sample_rate: float
     peak_power: float | None = None
     noise_floor: float | None = None
-    signals: list[SignalResponse] = []
+    signals: list[SignalResponse] = Field(default_factory=list)
+
+
+class CaptureCreateRequest(BaseModel):
+    frequency: float = Field(..., gt=0, description="Frecuencia central en Hz")
+    duration: float = Field(default=10.0, gt=0, description="Duracion en segundos")
+    sample_rate: float = Field(default=10e6, gt=0, description="Tasa de muestreo en Hz")
+
+
+class DetectionRequest(BaseModel):
+    capture_id: int = Field(default=1, ge=1)
+
+
+class ClassificationRequest(BaseModel):
+    frequency: float = Field(..., gt=0)
+    bandwidth: float = Field(..., ge=0)
+    power: float
+
+
+class ExportRequest(BaseModel):
+    capture_id: int = Field(..., ge=1)
 
 
 class ScanResponse(BaseModel):

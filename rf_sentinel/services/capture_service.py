@@ -1,6 +1,6 @@
 """Servicio de capturas."""
 
-from datetime import datetime
+from datetime import UTC, datetime
 
 from rf_sentinel.database.models.capture import Capture
 from rf_sentinel.database.repositories.capture_repo import CaptureRepository
@@ -27,7 +27,7 @@ class CaptureService:
             center_frequency=frequency,
             sample_rate=sample_rate,
             duration=duration,
-            timestamp=datetime.utcnow(),
+            timestamp=datetime.now(UTC),
         )
         if not self.capture_repo:
             capture.id = self._next_id

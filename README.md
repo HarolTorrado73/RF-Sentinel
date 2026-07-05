@@ -35,6 +35,8 @@ Plataforma Open Source para análisis de radiofrecuencia usando HackRF One y otr
 - API REST con FastAPI
 - Arquitectura modular
 - Sistema de plugins extensible
+- Academia interactiva RF/SDR con progreso de usuario
+- Material educativo orientado a investigacion responsable
 
 ## Visual Tour
 
@@ -91,6 +93,24 @@ pip install rf-sentinel[rtl]    # Con soporte RTL-SDR
 rf-sentinel api    # Iniciar servidor API
 rf-sentinel ui     # Iniciar interfaz gráfica
 ```
+
+## Academia RF Sentinel
+
+La interfaz web incluye la **Academia RF Sentinel** (FASE 4) con cursos interactivos sobre:
+
+- Fundamentos de RF
+- Conceptos SDR
+- Uso responsable de HackRF
+- Analisis de senales
+- Integracion de hardware
+
+Incluye progreso del usuario (persistencia local), micro-quiz por modulo y exportacion del progreso a JSON.
+
+Politica educativa:
+
+- Enfoque en educacion e investigacion
+- Aprendizaje responsable
+- No se incluye contenido orientado a interferencia ni actividades ilegales
 
 ## API
 

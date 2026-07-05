@@ -41,6 +41,10 @@ document.addEventListener('DOMContentLoaded', () => {
   window.Modals.init();
   initCounters();
 
+  if (window.Academy && typeof window.Academy.initAcademy === 'function') {
+    window.Academy.initAcademy('academy-root');
+  }
+
   document.querySelectorAll('.nav-links a').forEach(a => {
     a.addEventListener('click', (e) => {
       const href = a.getAttribute('href');

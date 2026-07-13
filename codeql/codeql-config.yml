@@ -1,0 +1,8 @@
+name: sentinelrecon
+paths:
+  - backend
+  - frontend
+  - docker
+queries:
+  - uses: security-and-quality
+  - uses: security-extended

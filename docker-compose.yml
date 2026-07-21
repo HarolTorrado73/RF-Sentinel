@@ -1,0 +1,107 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: rf-sentinel-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-sentinelrecon}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-sentinelrecon}
+      POSTGRES_DB: ${POSTGRES_DB:-sentinelrecon}
+    # Puerto del host opcional (descomentar para acceso local a Postgres).
+    # ports:
+    #   - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-sentinelrecon} -d ${POSTGRES_DB:-sentinelrecon}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  redis:
+    image: redis:7-alpine
+    container_name: rf-sentinel-redis
+    restart: unless-stopped
+    # Puerto del host opcional (descomentar para acceso local a Redis).
+    # ports:
+    #   - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: ../docker/backend.Dockerfile
+    image: rf-sentinel-backend:local
+    container_name: rf-sentinel-backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      APP_ENV: ${APP_ENV:-development}
+      SECRET_KEY: ${SECRET_KEY:-change-me-in-production-use-secrets-token-urlsafe}
+      ALGORITHM: ${ALGORITHM:-HS256}
+      ACCESS_TOKEN_EXPIRE_MINUTES: ${ACCESS_TOKEN_EXPIRE_MINUTES:-30}
+      POSTGRES_SERVER: postgres
+      POSTGRES_USER: ${POSTGRES_USER:-sentinelrecon}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-sentinelrecon}
+      POSTGRES_DB: ${POSTGRES_DB:-sentinelrecon}
+      POSTGRES_PORT: 5432
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_DB: ${REDIS_DB:-0}
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-sentinelrecon}:${POSTGRES_PASSWORD:-sentinelrecon}@postgres:5432/${POSTGRES_DB:-sentinelrecon}
+      REDIS_URL: redis://redis:6379/${REDIS_DB:-0}
+      CELERY_BROKER_URL: redis://redis:6379/${REDIS_DB:-0}
+      CELERY_RESULT_BACKEND: redis://redis:6379/${REDIS_DB:-0}
+      STORAGE_PATH: storage
+      REPORTS_DIR: storage/reports
+      LOGS_DIR: logs
+    ports:
+      - "${API_PORT:-8000}:8000"
+    volumes:
+      - backend_storage:/app/storage
+      - backend_logs:/app/logs
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/health/"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 25s
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: ../docker/frontend.Dockerfile
+      args:
+        VITE_API_URL: ${VITE_API_URL:-http://localhost:8000}
+    image: rf-sentinel-frontend:local
+    container_name: rf-sentinel-frontend
+    restart: unless-stopped
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "${FRONTEND_PORT:-3000}:80"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+volumes:
+  postgres_data:
+  redis_data:
+  backend_storage:
+  backend_logs:

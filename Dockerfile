@@ -1,6 +1,6 @@
 # Imagen API por defecto (contexto: raíz del repositorio).
 # Usada por CI para etiquetar ghcr.io/.../rf-sentinel:latest
-FROM python:3.12-slim
+FROM python:3.14-slim
 
 WORKDIR /app
 

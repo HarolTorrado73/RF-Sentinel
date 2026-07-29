@@ -96,21 +96,27 @@ rf-sentinel ui     # Iniciar interfaz gráfica
 
 ## Academia RF Sentinel
 
-La interfaz web incluye la **Academia RF Sentinel** (FASE 4) con cursos interactivos sobre:
+La plataforma incluye la **Academia RF Sentinel** (FASE 4) con cursos interactivos sobre:
 
 - Fundamentos de RF
 - Conceptos SDR
 - Uso responsable de HackRF
-- Analisis de senales
-- Integracion de hardware
+- Análisis de señales
+- Integración de hardware
 
-Incluye progreso del usuario (persistencia local), micro-quiz por modulo y exportacion del progreso a JSON.
+Disponible en el frontend (`/academy`) con:
 
-Politica educativa:
+- Progreso de usuario persistente en el backend
+- Micro-quizzes por lección (con reintento)
+- Ejemplo visual por lección
+- Exportación de progreso a JSON
+- Material documentado en [docs/academy.md](docs/academy.md)
 
-- Enfoque en educacion e investigacion
+Política educativa:
+
+- Enfoque en educación e investigación
 - Aprendizaje responsable
-- No se incluye contenido orientado a interferencia ni actividades ilegales
+- No se incluye contenido orientado a interferencia, jamming ni actividades ilegales
 
 ## API
 

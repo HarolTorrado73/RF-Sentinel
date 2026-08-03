@@ -42,4 +42,23 @@ describe('QuizWidget', () => {
     expect(screen.getByText(/revisa las explicaciones/i)).toBeInTheDocument()
     expect(onComplete).not.toHaveBeenCalled()
   })
+
+  it('permite reintentar tras reprobar', async () => {
+    const user = userEvent.setup()
+    const onComplete = vi.fn()
+
+    render(<QuizWidget quiz={mockQuiz} onComplete={onComplete} />)
+
+    await user.click(screen.getByRole('button', { name: /^vatios$/i }))
+    await user.click(screen.getByRole('button', { name: /enviar respuestas/i }))
+    await user.click(screen.getByRole('button', { name: /reintentar quiz/i }))
+
+    expect(screen.getByRole('button', { name: /enviar respuestas/i })).toBeInTheDocument()
+    expect(onComplete).not.toHaveBeenCalled()
+
+    await user.click(screen.getByRole('button', { name: /ciclos por segundo/i }))
+    await user.click(screen.getByRole('button', { name: /enviar respuestas/i }))
+
+    expect(onComplete).toHaveBeenCalledWith(100)
+  })
 })

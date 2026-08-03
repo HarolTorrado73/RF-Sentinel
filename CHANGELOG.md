@@ -9,17 +9,19 @@ All notable changes to RF Sentinel will be documented in this file.
 - Alias de configuracion modular en `rf_sentinel/config/settings.py`.
 - Placeholder de interfaz web en `rf_sentinel/ui/web/__init__.py`.
 - Pruebas de arquitectura modular y plugins en `tests/test_phase3_architecture.py`.
-- Fase 4 de Academia RF Sentinel integrada en la web con cursos interactivos y micro-quiz por modulo (`assets/js/academy.js`).
-- Material educativo de la academia documentado en `docs/academy.md`.
-- Exportacion de progreso de usuario en formato JSON desde la interfaz de academia.
+- Fase 4 Academia RF Sentinel en frontend React + API `/api/v1/academy` (5 cursos, 13 lecciones, quizzes, visualizadores y progreso servidor).
+- Exportacion de progreso de academia a JSON desde **Mi aprendizaje**.
+- Reintento de quiz tras reprobar y quizzes ampliados (3 preguntas por leccion).
+- Material educativo documentado en `docs/academy.md`.
+- Infraestructura Docker Compose (backend, frontend, PostgreSQL, Redis).
 
 ### Changed
 - Inyeccion de dependencias API con instancias compartidas para services, pipeline y registry en `rf_sentinel/api/dependencies.py`.
 - Endpoints de captura, deteccion, clasificacion y exportacion alineados a contratos de request en `rf_sentinel/api/routers/*`.
 - Correccion de timestamp UTC en `rf_sentinel/services/capture_service.py`.
 - Esquemas API mejorados con request models y defaults seguros en `rf_sentinel/api/schemas/__init__.py`.
-- Landing principal actualizada con seccion `Academia RF Sentinel` y navegacion dedicada (`index.html`, `assets/js/main.js`, `assets/css/main.css`).
-
+- Documentacion de academia actualizada al stack React/API (la landing estatica queda como demo promocional).
+- Sync de material educativo de academia sin perder progreso de usuario.
 ## [0.1.0] - 2025-01-15
 
 ### Added

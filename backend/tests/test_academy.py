@@ -62,6 +62,17 @@ def test_enroll_and_track_progress(
     assert learning["overall_progress_percent"] > 0
 
 
+def test_lesson_quiz_has_multiple_questions(client: TestClient) -> None:
+    response = client.get(
+        "/api/v1/academy/courses/rf-fundamentos/lessons/espectro-electromagnetico"
+    )
+    assert response.status_code == 200
+    quiz = response.json()["quiz"]
+    assert quiz is not None
+    assert len(quiz["questions"]) >= 3
+    assert quiz["passing_score"] == 70
+
+
 def test_quiz_fails_below_passing_score(
     client: TestClient, auth_headers: dict[str, str]
 ) -> None:

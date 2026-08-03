@@ -23,20 +23,68 @@ class AcademyService:
     @staticmethod
     async def seed_content(db: AsyncSession) -> None:
         result = await db.execute(select(func.count()).select_from(Course))
-        if result.scalar_one() > 0:
+        if result.scalar_one() == 0:
+            for course_data in copy.deepcopy(ACADEMY_COURSES):
+                lessons_data = course_data.pop("lessons")
+                course = Course(**course_data)
+                db.add(course)
+                await db.flush()
+
+                for lesson_data in lessons_data:
+                    lesson = Lesson(course_id=course.id, **lesson_data)
+                    db.add(lesson)
+
+            await db.commit()
             return
 
-        for course_data in copy.deepcopy(ACADEMY_COURSES):
-            lessons_data = course_data.pop("lessons")
-            course = Course(**course_data)
-            db.add(course)
-            await db.flush()
+        await AcademyService._sync_lesson_material(db)
 
-            for lesson_data in lessons_data:
-                lesson = Lesson(course_id=course.id, **lesson_data)
+    @staticmethod
+    async def _sync_lesson_material(db: AsyncSession) -> None:
+        """Actualiza contenido/quiz/visual de lecciones existentes sin romper progreso."""
+        course_result = await db.execute(select(Course).options(selectinload(Course.lessons)))
+        courses_by_slug = {course.slug: course for course in course_result.scalars().all()}
+        changed = False
+
+        for course_data in copy.deepcopy(ACADEMY_COURSES):
+            course = courses_by_slug.get(course_data["slug"])
+            if course is None:
+                continue
+
+            course.title = course_data["title"]
+            course.description = course_data["description"]
+            course.category = course_data["category"]
+            course.difficulty = course_data["difficulty"]
+            course.estimated_hours = course_data["estimated_hours"]
+            course.disclaimer = course_data.get("disclaimer")
+            course.order_index = course_data["order_index"]
+            db.add(course)
+
+            lessons_by_slug = {lesson.slug: lesson for lesson in course.lessons}
+            for lesson_data in course_data["lessons"]:
+                lesson = lessons_by_slug.get(lesson_data["slug"])
+                if lesson is None:
+                    lesson = Lesson(course_id=course.id, **lesson_data)
+                    db.add(lesson)
+                    changed = True
+                    continue
+
+                for field in (
+                    "title",
+                    "content",
+                    "visual_type",
+                    "visual_data",
+                    "quiz",
+                    "order_index",
+                    "duration_minutes",
+                ):
+                    if getattr(lesson, field) != lesson_data.get(field):
+                        setattr(lesson, field, lesson_data.get(field))
+                        changed = True
                 db.add(lesson)
 
-        await db.commit()
+        if changed:
+            await db.commit()
 
     @staticmethod
     async def _get_progress_map(

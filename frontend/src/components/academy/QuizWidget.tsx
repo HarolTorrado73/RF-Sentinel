@@ -29,7 +29,14 @@ export default function QuizWidget({ quiz, onComplete, disabled }: QuizWidgetPro
     }
   }
 
+  const handleRetry = () => {
+    setAnswers({})
+    setSubmitted(false)
+    setScore(0)
+  }
+
   const allAnswered = quiz.questions.every((q) => answers[q.id] !== undefined)
+  const passed = submitted && score >= quiz.passing_score
 
   return (
     <div className="cyber-card space-y-4">
@@ -89,14 +96,24 @@ export default function QuizWidget({ quiz, onComplete, disabled }: QuizWidgetPro
           Enviar respuestas
         </button>
       ) : (
-        <div className="text-sm">
+        <div className="text-sm space-y-3">
           <p className="font-bold">
             Puntuación: {score}% (mínimo {quiz.passing_score}%)
           </p>
-          {score >= quiz.passing_score ? (
-            <p className="text-green-500 mt-1">¡Aprobado! Lección completada.</p>
+          {passed ? (
+            <p className="text-green-500">¡Aprobado! Lección completada.</p>
           ) : (
-            <p className="text-red-500 mt-1">Revisa las explicaciones e intenta de nuevo.</p>
+            <>
+              <p className="text-red-500">Revisa las explicaciones e intenta de nuevo.</p>
+              <button
+                type="button"
+                className="cyber-button"
+                disabled={disabled}
+                onClick={handleRetry}
+              >
+                Reintentar quiz
+              </button>
+            </>
           )}
         </div>
       )}

@@ -58,15 +58,12 @@ jobs:
         push: ${{ github.event_name != 'pull_request' }}
         tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/frontend:latest
         labels: ${{ steps.meta.outputs.labels }}
+        build-args: |
+          VITE_API_URL=
         cache-from: type=gha
         cache-to: type=gha,mode=max
 
-    - name: Build and push docker-compose
-      uses: docker/build-push-action@v5
-      with:
-        context: .
-        push: ${{ github.event_name != 'pull_request' }}
-        tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
-        labels: ${{ steps.meta.outputs.labels }}
-        cache-from: type=gha
-        cache-to: type=gha,mode=max
+    - name: Validate docker-compose config
+      run: |
+        cp .env.example .env
+        docker compose config --quiet

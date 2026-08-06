@@ -17,6 +17,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 RUN mkdir -p storage/reports logs \
+    && sed -i 's/\r$//' scripts/docker-entrypoint.sh \
     && chmod +x scripts/docker-entrypoint.sh
 
 EXPOSE 8000

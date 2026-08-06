@@ -67,6 +67,10 @@ services:
       STORAGE_PATH: storage
       REPORTS_DIR: storage/reports
       LOGS_DIR: logs
+      SEED_ADMIN_EMAIL: ${SEED_ADMIN_EMAIL:-admin@rf-sentinel.local}
+      SEED_ADMIN_USERNAME: ${SEED_ADMIN_USERNAME:-admin}
+      SEED_ADMIN_PASSWORD: ${SEED_ADMIN_PASSWORD:-adminchangeme}
+      SEED_ADMIN_FULL_NAME: ${SEED_ADMIN_FULL_NAME:-RF Sentinel Admin}
     ports:
       - "${API_PORT:-8000}:8000"
     volumes:

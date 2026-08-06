@@ -82,4 +82,5 @@ logs/
 _site/
 
 # Alembic
-alembic/versions/*.pyc
+**/alembic/versions/*.pyc
+**/__pycache__/

@@ -5,18 +5,15 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import settings
-from app.core.database import Base, engine
 from app.api.api_v1.api import api_router
 
-# Registrar modelos en el metadata de SQLAlchemy.
+# Registrar modelos ORM (usado por dependencias/servicios).
 from app.models import academy, audit_log, machine, report, scan, session, target, user  # noqa: F401
 
 
 @asynccontextmanager
 async def lifespan(_app: FastAPI) -> AsyncIterator[None]:
-    if settings.APP_ENV != "test":
-        async with engine.begin() as conn:
-            await conn.run_sync(Base.metadata.create_all)
+    # El esquema se gestiona con Alembic (scripts/init_db.py en Docker).
     yield
 
 

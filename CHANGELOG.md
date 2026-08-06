@@ -14,6 +14,7 @@ All notable changes to RF Sentinel will be documented in this file.
 - Reintento de quiz tras reprobar y quizzes ampliados (3 preguntas por leccion).
 - Material educativo documentado en `docs/academy.md`.
 - Infraestructura Docker Compose (backend, frontend, PostgreSQL, Redis).
+- Migraciones Alembic + semillas iniciales para PostgreSQL (`docs/database.md`).
 
 ### Changed
 - Inyeccion de dependencias API con instancias compartidas para services, pipeline y registry en `rf_sentinel/api/dependencies.py`.
@@ -22,6 +23,7 @@ All notable changes to RF Sentinel will be documented in this file.
 - Esquemas API mejorados con request models y defaults seguros en `rf_sentinel/api/schemas/__init__.py`.
 - Documentacion de academia actualizada al stack React/API (la landing estatica queda como demo promocional).
 - Sync de material educativo de academia sin perder progreso de usuario.
+- Esquema de base de datos gestionado por Alembic en lugar de `create_all` en el arranque de la API.
 ## [0.1.0] - 2025-01-15
 
 ### Added
